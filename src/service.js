@@ -1,5 +1,5 @@
 class BlogService {
-    _baseUrl = 'http://127.0.0.1:8000'
+    _baseUrl = 'http://localhost:8000'
     getResource = async (url) => {
         const res = await fetch(`${this._baseUrl}${url}`)
         if (!res.ok) {
