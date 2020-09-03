@@ -5,7 +5,7 @@ const NavbarMenu = () => {
     return (
         <ul className="nav navbar-nav menu_nav justify-content-center">
             <li className="nav-item active"><Link className="nav-link" to='/'>Home</Link></li>
-            <li className="nav-item"><a className="nav-link" href="archive.html">Archive</a></li>
+            <li className="nav-item"><Link className="nav-link" to='/set-blog'>Set blog</Link></li>
             <li className="nav-item"><a className="nav-link" href="category.html">Category</a></li>
             <li className="nav-item submenu dropdown">
                 <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"

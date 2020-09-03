@@ -7,6 +7,7 @@ import BlogPostArea from "../blog-post-area/blog-post-area";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Login from "../login";
 import Register from "../register/register";
+import SetBlog from "../set-blog/set-blog";
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
                         </Route>
                         <Route exact path='/login' component={Login}/>
                         <Route exact path='/register' component={Register}/>
+                        <Route exact path='/set-blog' component={SetBlog}/>
                     </Switch>
                 </Router>
             </BlogServiceProvide>

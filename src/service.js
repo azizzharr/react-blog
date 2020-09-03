@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+
 class BlogService {
     _baseUrl = 'https://nurkadyrnur.pythonanywhere.com'
     getResource = async (url) => {
@@ -12,7 +14,8 @@ class BlogService {
         const res = await fetch(`${this._baseUrl}${url}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${Cookies.get('token')}`
             },
             body: JSON.stringify(body)
         })
@@ -34,6 +37,10 @@ class BlogService {
     getBlogs = async () => {
         const json = await this.getResource('/news')
         return json.map(this._transformBlog)
+    }
+
+    setBlog = (body) => {
+        return this.setResource('/news/', body)
     }
 
     _transformBlog = (item) => {

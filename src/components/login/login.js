@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
+import Cookies from 'js-cookie'
+import {withRouter} from "react-router-dom";
 
 class Login extends Component {
 
@@ -19,9 +21,11 @@ class Login extends Component {
     onSubmit = async (e) => {
         e.preventDefault()
         await this.props.login(this.state).then((data) => {
-            console.log(data)
-        }).catch(async ({res}) => {
-            if (res.status === 400) {
+            Cookies.set('token', data.token)
+            this.props.history.push('/')
+        }).catch(async (err) => {
+            const {res} = err;
+            if (res && res.status === 400) {
                 const errors = await res.json()
                 this.setState({
                     errors
@@ -79,4 +83,4 @@ const mapMethodsToProps = (blogService) => {
     }
 }
 
-export default withBlogService(mapMethodsToProps)(Login);
+export default withBlogService(mapMethodsToProps)(withRouter(Login));
