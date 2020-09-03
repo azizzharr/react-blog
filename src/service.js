@@ -1,5 +1,5 @@
 class BlogService {
-    _baseUrl = 'http://localhost:8000'
+    _baseUrl = 'https://nurkadyrnur.pythonanywhere.com'
     getResource = async (url) => {
         const res = await fetch(`${this._baseUrl}${url}`)
         if (!res.ok) {
@@ -8,8 +8,44 @@ class BlogService {
         return await res.json()
     }
 
+    setResource = async (url, body) => {
+        const res = await fetch(`${this._baseUrl}${url}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        if (!res.ok) {
+            const err = new Error(res.statusText || res.status)
+            err.res = res
+            throw err
+        }
+        return await res.json()
+    }
+
+    login = (body) => {
+        return this.setResource('/auth/token/login/', body)
+    }
+    register = (body) => {
+        return this.setResource('/auth/users/', body)
+    }
+
     getBlogs = async () => {
-        return await this.getResource('/news')
+        const json = await this.getResource('/news')
+        return json.map(this._transformBlog)
+    }
+
+    _transformBlog = (item) => {
+        return {
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            imageBlog: `${this._baseUrl}${item['image_blog']}`,
+            body: item.body,
+            createAt: item['created_at'],
+            updateAt: item['updated_at'],
+        }
     }
 }
 

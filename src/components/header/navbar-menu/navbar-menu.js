@@ -1,9 +1,10 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 const NavbarMenu = () => {
     return (
         <ul className="nav navbar-nav menu_nav justify-content-center">
-            <li className="nav-item active"><a className="nav-link" href="index.html">Home</a></li>
+            <li className="nav-item active"><Link className="nav-link" to='/'>Home</Link></li>
             <li className="nav-item"><a className="nav-link" href="archive.html">Archive</a></li>
             <li className="nav-item"><a className="nav-link" href="category.html">Category</a></li>
             <li className="nav-item submenu dropdown">

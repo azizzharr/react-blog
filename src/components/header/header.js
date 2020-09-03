@@ -1,6 +1,7 @@
 import React from "react";
 import NavbarSocial from "./navbar-social";
 import NavbarMenu from "./navbar-menu";
+import {Link} from "react-router-dom";
 
 const Header = () => {
     return (
@@ -18,7 +19,16 @@ const Header = () => {
                         </button>
                         <div className="collapse navbar-collapse offset" id="navbarSupportedContent">
                             <NavbarMenu/>
-                            <NavbarSocial/>
+                            <div className='row' style={{
+                                minWidth:'200px'
+                            }}>
+                                <div className='col-6'>
+                                    <Link to='/login'>Sing In</Link>
+                                </div>
+                                <div className='col-6'>
+                                    <Link to='/register'>Sing Up</Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </nav>
