@@ -1,23 +1,45 @@
 import React, {Component} from "react";
 import withBlogService from "../provider/service/with-blog-service";
-import Pagination from "./pagination";
+import Pagination from "react-js-pagination";
 import SidebarWidgets from "./sidebar-widgets";
 import BlogItem from "./blog-item";
+import {withRouter} from "react-router-dom";
+import getSearchParam from "../hooks/search-params";
+
 
 class BlogPostArea extends Component {
     state = {
-        blogs: [],
+        blogs: {},
         loading: true,
+        activePage: 1
     }
 
-    componentDidMount() {
+    handlePageChange = (pageNumber) => {
+        this.setState({activePage: pageNumber});
+    }
+
+    getBlogsFromServer = () => {
         const {getBlogs} = this.props;
-        getBlogs().then((blogs) => {
+        getBlogs(this.state.activePage).then((blogs) => {
             this.setState({
                 blogs,
                 loading: false
             })
         })
+    }
+
+    componentDidMount() {
+        const {location: {search}} = this.props;
+        const page = +(getSearchParam(search, 'page')||1)
+        this.setState({activePage: page}, () => {
+            this.getBlogsFromServer()
+        });
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.activePage !== this.state.activePage) {
+            this.getBlogsFromServer()
+        }
     }
 
     render() {
@@ -30,10 +52,24 @@ class BlogPostArea extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8">
-                            {blogs.map((item)=>(
+                            {blogs.results.map((item) => (
                                 <BlogItem key={item.id} item={item}/>
                             ))}
-                            <Pagination/>
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <nav className="blog-pagination justify-content-center d-flex">
+                                        <Pagination
+                                            activePage={this.state.activePage}
+                                            itemsCountPerPage={10}
+                                            totalItemsCount={blogs.count}
+                                            pageRangeDisplayed={5}
+                                            onChange={this.handlePageChange}
+                                            itemClass='page-item'
+                                            linkClass='page-link'
+                                        />
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
                         <SidebarWidgets/>
                     </div>
@@ -49,4 +85,4 @@ const mapMethodsToProps = (blogService) => {
     }
 }
 
-export default withBlogService(mapMethodsToProps)(BlogPostArea);
+export default withBlogService(mapMethodsToProps)(withRouter(BlogPostArea));

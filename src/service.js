@@ -5,21 +5,31 @@ class BlogService {
     getResource = async (url) => {
         const res = await fetch(`${this._baseUrl}${url}`)
         if (!res.ok) {
+            if (res.status === 401) {
+                Cookies.remove('token')
+            }
             throw new Error('Error ' + res.status)
         }
         return await res.json()
     }
 
     setResource = async (url, body) => {
+        let auth = {}
+        if (Cookies.get('token')) {
+            auth = {'Authorization': `Token ${Cookies.get('token')}`}
+        }
         const res = await fetch(`${this._baseUrl}${url}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${Cookies.get('token')}`
+                ...auth
             },
             body: JSON.stringify(body)
         })
         if (!res.ok) {
+            if (res.status === 401) {
+                Cookies.remove('token')
+            }
             const err = new Error(res.statusText || res.status)
             err.res = res
             throw err
@@ -34,9 +44,9 @@ class BlogService {
         return this.setResource('/auth/users/', body)
     }
 
-    getBlogs = async () => {
-        const json = await this.getResource('/news')
-        return json.map(this._transformBlog)
+    getBlogs = async (page) => {
+        const json = await this.getResource(`/news/?page=${page}`)
+        return {...json, results: json.results.map(this._transformBlog)}
     }
 
     setBlog = (body) => {

@@ -1,6 +1,7 @@
 import React from "react";
 import Moment from 'react-moment';
 import 'moment-timezone';
+import parse from 'html-react-parser';
 
 const BlogItem = ({item}) => {
     return (
@@ -21,7 +22,7 @@ const BlogItem = ({item}) => {
                 <p className="tag-list-inline">Tag: <a href="#">travel</a>, <a href="#">life
                     style</a>, <a
                     href="#">technology</a>, <a href="#">fashion</a></p>
-                <p>{item.body}</p>
+                <div>{parse(item.body)}</div>
                 <a className="button" href="#">Read More <i className="ti-arrow-right"/></a>
             </div>
         </div>
