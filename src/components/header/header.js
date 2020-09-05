@@ -1,7 +1,7 @@
 import React from "react";
 import NavbarSocial from "./navbar-social";
 import NavbarMenu from "./navbar-menu";
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 const Header = () => {
     return (
@@ -23,10 +23,10 @@ const Header = () => {
                                 minWidth:'200px'
                             }}>
                                 <div className='col-6'>
-                                    <Link to='/login'>Sing In</Link>
+                                    <NavLink to='/login'>Sing In</NavLink>
                                 </div>
                                 <div className='col-6'>
-                                    <Link to='/register'>Sing Up</Link>
+                                    <NavLink to='/register'>Sing Up</NavLink>
                                 </div>
                             </div>
                         </div>
