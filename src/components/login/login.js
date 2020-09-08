@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
 import Cookies from 'js-cookie'
 import {withRouter} from "react-router-dom";
+import Swal from "sweetalert2";
+import withLogin from "../provider/login/with-login";
 
 class Login extends Component {
 
@@ -22,6 +24,14 @@ class Login extends Component {
         e.preventDefault()
         await this.props.login(this.state).then((data) => {
             Cookies.set('token', data.token)
+            this.props.auth(data)
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Вы авторизованы',
+                showConfirmButton: false,
+                timer: 1500
+            })
             this.props.history.push('/')
         }).catch(async (err) => {
             const {res} = err;
@@ -83,4 +93,4 @@ const mapMethodsToProps = (blogService) => {
     }
 }
 
-export default withBlogService(mapMethodsToProps)(withRouter(Login));
+export default withBlogService(mapMethodsToProps)(withRouter(withLogin(Login)));

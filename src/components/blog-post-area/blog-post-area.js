@@ -4,7 +4,7 @@ import Pagination from "react-js-pagination";
 import SidebarWidgets from "./sidebar-widgets";
 import BlogItem from "./blog-item";
 import {withRouter} from "react-router-dom";
-import getSearchParam from "../hooks/search-params";
+import getSearchParam, {setSearchParam} from "../hooks/search-params";
 
 
 class BlogPostArea extends Component {
@@ -15,6 +15,8 @@ class BlogPostArea extends Component {
     }
 
     handlePageChange = (pageNumber) => {
+        const {history: {push, location: {search}}} = this.props
+        push({search: setSearchParam(search, 'page', pageNumber)})
         this.setState({activePage: pageNumber});
     }
 
@@ -30,7 +32,7 @@ class BlogPostArea extends Component {
 
     componentDidMount() {
         const {location: {search}} = this.props;
-        const page = +(getSearchParam(search, 'page')||1)
+        const page = +(getSearchParam(search, 'page') || 1)
         this.setState({activePage: page}, () => {
             this.getBlogsFromServer()
         });

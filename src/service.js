@@ -2,24 +2,14 @@ import Cookies from 'js-cookie'
 
 class BlogService {
     _baseUrl = 'https://nurkadyrnur.pythonanywhere.com'
-    getResource = async (url) => {
-        const res = await fetch(`${this._baseUrl}${url}`)
-        if (!res.ok) {
-            if (res.status === 401) {
-                Cookies.remove('token')
-            }
-            throw new Error('Error ' + res.status)
-        }
-        return await res.json()
-    }
 
-    setResource = async (url, body) => {
+    request = async (method, url, body) => {
         let auth = {}
         if (Cookies.get('token')) {
             auth = {'Authorization': `Token ${Cookies.get('token')}`}
         }
         const res = await fetch(`${this._baseUrl}${url}`, {
-            method: 'POST',
+            method,
             headers: {
                 'Content-Type': 'application/json',
                 ...auth
@@ -34,7 +24,20 @@ class BlogService {
             err.res = res
             throw err
         }
+
         return await res.json()
+    }
+
+    getResource = (url) => {
+        return this.request('GET', url)
+    }
+
+    setResource = (url, body) => {
+        return this.request('POST', url, body)
+    }
+
+    getUser = () => {
+        return this.getResource('/auth/users/me/')
     }
 
     login = (body) => {

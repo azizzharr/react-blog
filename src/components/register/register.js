@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
+import Swal from "sweetalert2";
+import {withRouter} from "react-router-dom";
 
 class Register extends Component {
 
@@ -24,15 +26,23 @@ class Register extends Component {
             this.setState((state) => {
                 const {errors} = state
                 return {
-                    errors:{...errors,password2: ['Пароли не совпадают']}
+                    errors: {...errors, password2: ['Пароли не совпадают']}
                 }
             })
             return;
         }
         this.props.register(this.state).then((data) => {
-            console.log(data)
-        }).catch(async ({res}) => {
-            if (res.status === 400) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Вы зарегистрированы',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            this.props.history.push('/login')
+        }).catch(async (err) => {
+            const {res} = err;
+            if (res && res.status === 400) {
                 const errors = await res.json()
                 this.setState({
                     errors
@@ -100,4 +110,4 @@ const mapMethodsToProps = (blogService) => {
     }
 }
 
-export default withBlogService(mapMethodsToProps)(Register);
+export default withBlogService(mapMethodsToProps)(withRouter(Register));

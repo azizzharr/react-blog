@@ -2,8 +2,10 @@ import React from "react";
 import NavbarSocial from "./navbar-social";
 import NavbarMenu from "./navbar-menu";
 import {Link, NavLink} from "react-router-dom";
+import withLogin from "../provider/login/with-login";
 
-const Header = () => {
+const Header = ({isAuthenticated}) => {
+
     return (
         <header className="header_area">
             <div className="main_menu">
@@ -20,14 +22,16 @@ const Header = () => {
                         <div className="collapse navbar-collapse offset" id="navbarSupportedContent">
                             <NavbarMenu/>
                             <div className='row' style={{
-                                minWidth:'200px'
+                                minWidth: '200px'
                             }}>
-                                <div className='col-6'>
-                                    <NavLink to='/login'>Sing In</NavLink>
-                                </div>
-                                <div className='col-6'>
-                                    <NavLink to='/register'>Sing Up</NavLink>
-                                </div>
+                                {!isAuthenticated && [
+                                    <div className='col-6'>
+                                        <NavLink to='/login'>Sing In</NavLink>
+                                    </div>,
+                                    <div className='col-6'>
+                                        <NavLink to='/register'>Sing Up</NavLink>
+                                    </div>
+                                ]}
                             </div>
                         </div>
                     </div>
@@ -37,4 +41,4 @@ const Header = () => {
     )
 }
 
-export default Header;
+export default withLogin(Header);
