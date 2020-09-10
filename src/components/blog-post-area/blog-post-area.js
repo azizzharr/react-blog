@@ -17,7 +17,9 @@ class BlogPostArea extends Component {
     handlePageChange = (pageNumber) => {
         const {history: {push, location: {search}}} = this.props
         push({search: setSearchParam(search, 'page', pageNumber)})
-        this.setState({activePage: pageNumber});
+        this.setState({activePage: pageNumber}, () => {
+            window.scrollTo(0, 0);
+        });
     }
 
     getBlogsFromServer = () => {
@@ -50,12 +52,12 @@ class BlogPostArea extends Component {
             return <p>Loading...</p>
         }
         return (
-            <section className="blog-post-area section-margin mt-4">
+            <section id='blogList' className="blog-post-area section-margin mt-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8">
                             {blogs.results.map((item) => (
-                                <BlogItem key={item.id} item={item}/>
+                                <BlogItem getBlogsFromServer={this.getBlogsFromServer} key={item.id} item={item}/>
                             ))}
                             <div className="row">
                                 <div className="col-lg-12">

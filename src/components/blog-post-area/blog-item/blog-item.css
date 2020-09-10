@@ -1,0 +1,7 @@
+.trash {
+    font-size: 25px;
+    right: 0;
+    position: absolute;
+    color: #8080ed;
+    cursor: pointer;
+}

@@ -2,13 +2,48 @@ import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import withLogin from "../provider/login/with-login";
+import {Redirect} from "react-router-dom";
+import Swal from "sweetalert2";
+import Loader from "../loader";
+import SetBlogRender from "./set-blog-render";
+import notice from "../hooks/alerts";
+
+const initialState = {
+    title: '',
+    body: '',
+    short_body: '',
+    type: 'a',
+    errors: {},
+}
 
 class SetBlog extends Component {
 
     state = {
-        title: '',
-        body: '',
-        errors: {}
+        ...initialState,
+        options: {},
+        loading: true
+    }
+
+    componentDidMount() {
+        this.props.getOptions('/news/').then((data) => {
+            this.setState({options: data.actions['POST'], loading: false})
+        })
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault()
+        this.props.setBlog(this.state).then((data) => {
+            this.setState(initialState)
+            notice('Сохранено', 'success')
+        }).catch(async ({res}) => {
+            if (res && res.status === 400) {
+                const errors = await res.json()
+                this.setState({
+                    errors
+                })
+            }
+        })
     }
 
     onChangeInputs = (e) => {
@@ -18,70 +53,32 @@ class SetBlog extends Component {
         })
     }
 
-    onSubmit = (e) => {
-        e.preventDefault()
-        this.props.setBlog(this.state).then((data) => {
-            console.log(data)
-        }).catch(async ({res}) => {
-            if (res.status === 400) {
-                const errors = await res.json()
-                this.setState({
-                    errors
-                })
-            }
-        })
+    onChangeCKEditor = (data) => {
+        this.setState(data)
     }
 
+
     render() {
-        return (
-            <div className='container jumbotron'>
-                <div className="card col-8 offset-2">
-                    <article className="card-body">
-                        <h4 className="card-title mb-4 mt-1">Set blog</h4>
-                        {this.state.errors.detail && <div className="text-danger">
-                            {this.state.errors.detail}
-                        </div>}
-                        <form onSubmit={this.onSubmit}>
-                            <div className="form-group">
-                                <label>Title</label>
-                                <input onChange={this.onChangeInputs} name="title" value={this.state.username}
-                                       className="form-control"
-                                       placeholder="Title" type="text"/>
-                                {this.state.errors.title && <div className="text-danger">
-                                    {this.state.errors.title[0]}
-                                </div>}
+        const {loading} = this.state;
+        if (!this.props.isAuthenticated) {
+            notice('Вы не авторизованы', 'warning')
+            return <Redirect to='/login'/>
+        }
+        if (loading) {
+            return <Loader/>
+        }
 
-                            </div>
-                            <div className='form-group'>
-                                <CKEditor
-                                    editor={ClassicEditor}
-                                    onChange={(event, editor) => {
-                                        const body = editor.getData();
-                                        this.setState({body})
-                                    }}
-                                />
-                                {this.state.errors.body && <div className="text-danger">
-                                    {this.state.errors.body[0]}
-                                </div>}
-
-                            </div>
-
-                            <div className="form-group">
-                                <button type="submit" className="btn btn-primary btn-block"> Login</button>
-                            </div>
-                        </form>
-                    </article>
-                </div>
-            </div>
-        )
+        return <SetBlogRender onChangeInputs={this.onChangeInputs} onSubmit={this.onSubmit}
+                              onChangeCKEditor={this.onChangeCKEditor} state={this.state}/>
     }
 
 }
 
 const mapMethodsToProps = (blogService) => {
     return {
-        setBlog: blogService.setBlog
+        setBlog: blogService.setBlog,
+        getOptions: blogService.getOptions
     }
 }
 
-export default withBlogService(mapMethodsToProps)(SetBlog);
+export default withBlogService(mapMethodsToProps)(withLogin(SetBlog));

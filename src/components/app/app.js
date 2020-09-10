@@ -22,6 +22,11 @@ class App extends Component {
         this.props.getUser().then((data) => {
             this.auth(data)
             this.setState({loading: false})
+        }).catch(({res}) => {
+            if (res && res.status === 401) {
+                this.unAuth()
+                this.setState({loading: false})
+            }
         })
     }
 

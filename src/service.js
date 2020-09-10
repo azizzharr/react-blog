@@ -24,12 +24,29 @@ class BlogService {
             err.res = res
             throw err
         }
-
-        return await res.json()
+        const contentType = res.headers.get("content-type");
+        if (contentType === 'application/json') {
+            return await res.json()
+        }
     }
 
     getResource = (url) => {
         return this.request('GET', url)
+    }
+
+    deleteResource = (url) => {
+        return this.request('DELETE', url)
+    }
+
+    getOptions = (url) => {
+        return this.request('OPTIONS', url)
+    }
+
+    deleteBlog = (id) => {
+        if (!id) {
+            throw new Error('ID undefined, please give me id number, ')
+        }
+        return this.deleteResource(`/news/${id}/`)
     }
 
     setResource = (url, body) => {
@@ -61,6 +78,7 @@ class BlogService {
             id: item.id,
             title: item.title,
             author: item.author,
+            type: item.type,
             imageBlog: `${this._baseUrl}${item['image_blog']}`,
             body: item.body,
             createAt: item['created_at'],

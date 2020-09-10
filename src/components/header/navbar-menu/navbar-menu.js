@@ -1,12 +1,14 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import withLogin from "../../provider/login/with-login";
+import {NavLink} from "react-router-dom";
 
 const NavbarMenu = ({isAuthenticated}) => {
     return (
         <ul className="nav navbar-nav menu_nav justify-content-center">
             <li className="nav-item active"><Link className="nav-link" to='/'>Home</Link></li>
-            {isAuthenticated && <li className="nav-item"><Link className="nav-link" to='/set-blog'>Set blog</Link></li>}
+            {isAuthenticated &&
+            <li className="nav-item"><NavLink className="nav-link" to='/set-blog'>Set blog</NavLink></li>}
             <li className="nav-item"><a className="nav-link" href="category.html">Category</a></li>
             <li className="nav-item submenu dropdown">
                 <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"
