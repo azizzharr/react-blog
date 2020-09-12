@@ -1,10 +1,9 @@
 import React from "react";
-import NavbarSocial from "./navbar-social";
 import NavbarMenu from "./navbar-menu";
-import {Link, NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import withLogin from "../provider/login/with-login";
 
-const Header = ({isAuthenticated}) => {
+const Header = ({isAuthenticated,user}) => {
 
     return (
         <header className="header_area">
@@ -25,13 +24,14 @@ const Header = ({isAuthenticated}) => {
                                 minWidth: '200px'
                             }}>
                                 {!isAuthenticated && [
-                                    <div className='col-6'>
-                                        <NavLink to='/login'>Sing In</NavLink>
+                                    <div key='login' className='col-6'>
+                                        <Link to='/login'>Sing In</Link>
                                     </div>,
-                                    <div className='col-6'>
-                                        <NavLink to='/register'>Sing Up</NavLink>
+                                    <div key='register' className='col-6'>
+                                        <Link to='/register'>Sing Up</Link>
                                     </div>
                                 ]}
+                                {isAuthenticated && <p>{user.username}</p>}
                             </div>
                         </div>
                     </div>

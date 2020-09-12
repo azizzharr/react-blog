@@ -1,0 +1,3 @@
+.header_area .navbar .nav .nav-item:hover .nav-link, .header_area .navbar .nav .nav-link.active {
+    color: #ff9907;
+}

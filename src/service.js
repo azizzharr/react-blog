@@ -16,6 +16,29 @@ class BlogService {
             },
             body: JSON.stringify(body)
         })
+        return this.getResult(res)
+    }
+
+    requestForm = async (method, url, body) => {
+        let auth = {}
+        if (Cookies.get('token')) {
+            auth = {'Authorization': `Token ${Cookies.get('token')}`}
+        }
+        const form = new FormData();
+        for (const item of Object.entries(body)) {
+            form.append(...item)
+        }
+        const res = await fetch(`${this._baseUrl}${url}`, {
+            method,
+            headers: {
+                ...auth
+            },
+            body: form
+        })
+        return this.getResult(res)
+    }
+
+    getResult = async (res) => {
         if (!res.ok) {
             if (res.status === 401) {
                 Cookies.remove('token')
@@ -69,8 +92,13 @@ class BlogService {
         return {...json, results: json.results.map(this._transformBlog)}
     }
 
+    getBlog = async (id) => {
+        const json = await this.getResource(`/news/${id}/`)
+        return this._transformBlog(json)
+    }
+
     setBlog = (body) => {
-        return this.setResource('/news/', body)
+        return this.requestForm('POST', '/news/', body)
     }
 
     _transformBlog = (item) => {
@@ -78,6 +106,7 @@ class BlogService {
             id: item.id,
             title: item.title,
             author: item.author,
+            shortBody:item.short_body,
             type: item.type,
             imageBlog: `${this._baseUrl}${item['image_blog']}`,
             body: item.body,

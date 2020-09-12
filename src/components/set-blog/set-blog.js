@@ -4,15 +4,16 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import withLogin from "../provider/login/with-login";
 import {Redirect} from "react-router-dom";
-import Swal from "sweetalert2";
 import Loader from "../loader";
 import SetBlogRender from "./set-blog-render";
 import notice from "../hooks/alerts";
 
 const initialState = {
-    title: '',
-    body: '',
-    short_body: '',
+    data: {
+        title: '',
+        body: '',
+        short_body: '',
+    },
     type: 'a',
     errors: {},
 }
@@ -33,9 +34,10 @@ class SetBlog extends Component {
 
     onSubmit = (e) => {
         e.preventDefault()
-        this.props.setBlog(this.state).then((data) => {
+        this.props.setBlog(this.state.data).then((data) => {
             this.setState(initialState)
             notice('Сохранено', 'success')
+            this.props.history.replace(`/blog/${data.id}`)
         }).catch(async ({res}) => {
             if (res && res.status === 400) {
                 const errors = await res.json()
@@ -48,13 +50,28 @@ class SetBlog extends Component {
 
     onChangeInputs = (e) => {
         const elem = e.target
-        this.setState({
-            [elem.name]: elem.value
+        this.setState(({data}) => {
+            return {
+                data: {...data, [elem.name]: elem.value}
+            }
         })
     }
 
-    onChangeCKEditor = (data) => {
-        this.setState(data)
+    onChangeFile = (e) => {
+        const elem = e.target
+        this.setState(({data}) => {
+            return {
+                data: {...data, image: elem.files[0]}
+            }
+        })
+    }
+
+    onChangeCKEditor = (dataCK) => {
+        this.setState(({data}) => {
+            return {
+                data: {...data, ...dataCK}
+            }
+        })
     }
 
 
@@ -68,7 +85,8 @@ class SetBlog extends Component {
             return <Loader/>
         }
 
-        return <SetBlogRender onChangeInputs={this.onChangeInputs} onSubmit={this.onSubmit}
+        return <SetBlogRender onChangeFile={this.onChangeFile} onChangeInputs={this.onChangeInputs}
+                              onSubmit={this.onSubmit}
                               onChangeCKEditor={this.onChangeCKEditor} state={this.state}/>
     }
 
