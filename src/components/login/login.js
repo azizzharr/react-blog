@@ -25,7 +25,7 @@ class Login extends Component {
         e.preventDefault()
         await this.props.login(this.state).then((data) => {
             Cookies.set('token', data.token)
-            this.props.getUser(data).then(() => {
+            this.props.getUser().then(() => {
                 notice('Вы авторизованы', 'success')
                 this.props.history.push('/')
             })
