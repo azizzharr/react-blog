@@ -6,60 +6,42 @@ import withBlogService from "../provider/service/with-blog-service";
 import Loader from "../loader";
 import Moment from "react-moment";
 import parse from "html-react-parser";
+import DetailBlogRender from "./detail-blog-render";
 
 class DetailBlog extends Component {
     state = {
         blog: {},
         loading: true,
+        error: null
     }
 
     componentDidMount() {
+        this.getBlog().then(() => {
+            this.setState({loading: false})
+        })
+    }
+
+    getBlog = async () => {
         const {getBlog, match: {params: {id}}} = this.props
-        getBlog(id).then((data) => {
-            this.setState({blog:data,loading: false})
+        await getBlog(id).then((data) => {
+            this.setState({blog: data})
+        }).catch(({res}) => {
+            if (res && res.status === 404) {
+                this.setState({error: 404})
+            }
         })
     }
 
     render() {
-        const {blog, loading} = this.state
+        const {blog, loading, error} = this.state
         if (loading) {
             return <Loader/>
         }
+        if (error === 404) {
+            return <p>Не найдено</p>
+        }
         return (
-            <div>
-                <DetailHeroBanner/>
-                <section className="blog-post-area section-margin">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-8">
-                                <div className="main_blog_details">
-                                    <img className="img-fluid" src={blog.imageBlog} alt=""/>
-                                    <a href="#"><h4>{blog.title}</h4></a>
-                                    <div className="user_details">
-                                        <div className="float-left">
-                                            <a href="#">Lifestyle</a>
-                                            <a href="#">Gadget</a>
-                                        </div>
-                                        <div className="float-right mt-sm-0 mt-3">
-                                            <div className="media">
-                                                <div className="media-body">
-                                                    <h5>{blog.author}</h5>
-                                                    <p><Moment format="YYYY-MM-DD HH:mm">{blog.createAt}</Moment></p>
-                                                </div>
-                                                <div className="d-flex">
-                                                    <img width="42" height="42" src="/img/blog/user-img.png" alt=""/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {parse(blog.body || "")}
-                                </div>
-                            </div>
-                            <SidebarWidgets/>
-                        </div>
-                    </div>
-                </section>
-            </div>
+            <DetailBlogRender blog={blog}/>
         );
     }
 }

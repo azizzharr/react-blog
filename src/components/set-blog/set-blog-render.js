@@ -33,6 +33,8 @@ const SetBlogRender = ({state, onSubmit, onChangeCKEditor, onChangeFile, onChang
                                     return <option key={value} value={value}>{displayName}</option>
                                 })}
                             </select>
+                            {state.errors.type && <div className="text-danger">
+                                {state.errors.type[0]}</div>}
                         </div>
                         <div className='form-group'>
                             <label>Тело</label>

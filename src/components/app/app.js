@@ -11,6 +11,7 @@ import withBlogService from "../provider/service/with-blog-service";
 import Loader from "../loader";
 import DetailHeroBanner from "../detail-blog/detail-hero-banner";
 import DetailBlog from "../detail-blog/detail-blog";
+import UpdateBlog from "../update-blog/update-blog";
 
 class App extends Component {
 
@@ -59,6 +60,7 @@ class App extends Component {
                         <Route exact path='/login' component={Login}/>
                         <Route exact path='/register' component={Register}/>
                         <Route exact path='/set-blog' component={SetBlog}/>
+                        <Route exact path='/update-blog/:id' component={UpdateBlog}/>
                         <Route exact path='/blog/:id'>
                             <DetailBlog/>
                         </Route>

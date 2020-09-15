@@ -1,9 +1,7 @@
 import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import withLogin from "../provider/login/with-login";
-import {Redirect} from "react-router-dom";
+import {withRouter, Redirect} from "react-router-dom";
 import Loader from "../loader";
 import SetBlogRender from "./set-blog-render";
 import notice from "../hooks/alerts";
@@ -13,8 +11,8 @@ const initialState = {
         title: '',
         body: '',
         short_body: '',
+        type: 'a',
     },
-    type: 'a',
     errors: {},
 }
 
@@ -27,14 +25,19 @@ class SetBlog extends Component {
     }
 
     componentDidMount() {
-        this.props.getOptions('/news/').then((data) => {
+        const {data, getOptions} = this.props
+        if (data) {
+            this.setState({data})
+        }
+        getOptions('/news/').then((data) => {
             this.setState({options: data.actions['POST'], loading: false})
         })
     }
 
     onSubmit = (e) => {
         e.preventDefault()
-        this.props.setBlog(this.state.data).then((data) => {
+        const postServer = this.props.updateBlog || this.props.setBlog
+        postServer(this.state.data).then((data) => {
             this.setState(initialState)
             notice('Сохранено', 'success')
             this.props.history.replace(`/blog/${data.id}`)
@@ -86,7 +89,7 @@ class SetBlog extends Component {
         }
 
         return <SetBlogRender onChangeFile={this.onChangeFile} onChangeInputs={this.onChangeInputs}
-                              onSubmit={this.onSubmit}
+                              onSubmit={this.props.onSubmit || this.onSubmit}
                               onChangeCKEditor={this.onChangeCKEditor} state={this.state}/>
     }
 
@@ -99,4 +102,4 @@ const mapMethodsToProps = (blogService) => {
     }
 }
 
-export default withBlogService(mapMethodsToProps)(withLogin(SetBlog));
+export default withBlogService(mapMethodsToProps)(withLogin(withRouter(SetBlog)));

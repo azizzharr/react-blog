@@ -11,7 +11,7 @@ import {Link} from "react-router-dom";
 
 class BlogItem extends Component {
 
-    deleteBlog = (id) => {
+    deleteBlog = (id) => () => {
         Swal.fire({
             title: 'Do you want delete?',
             showCancelButton: true,
@@ -27,7 +27,7 @@ class BlogItem extends Component {
     }
 
     render() {
-        const {item, isAuthenticated} = this.props
+        const {item, user} = this.props
         return (
             <div className="single-recent-blog-post">
                 <div className="thumb">
@@ -43,10 +43,15 @@ class BlogItem extends Component {
                     <Link to={`/blog/${item.id}`}>
                         <h3>{item.title}</h3>
                     </Link>
-                    <p className="tag-list-inline">Type: <a href="#">{item.type}</a></p>
+                    <p className="tag-list-inline">
+                        Type: <a href="#">{item.type}</a>
+                    </p>
                     <div>{parse(item.shortBody || "")}</div>
-                    <Link className="button" to={`/blog/${item.id}`}>Read More <i className="ti-arrow-right"/></Link>
-                    {isAuthenticated && <i onClick={() => this.deleteBlog(item.id)} className='fa fa-trash trash'/>}
+                    <Link className="button" to={`/blog/${item.id}`}>
+                        Read More <i className="ti-arrow-right"/>
+                    </Link>
+                    {(user.username === item.author) &&
+                    <i onClick={this.deleteBlog(item.id)} className='fa fa-trash trash'/>}
                 </div>
             </div>
         )

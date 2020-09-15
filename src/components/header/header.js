@@ -10,7 +10,7 @@ const Header = ({isAuthenticated, user}) => {
             <div className="main_menu">
                 <nav className="navbar navbar-expand-lg navbar-light">
                     <div className="container box_1620">
-                        <a className="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""/></a>
+                        <Link to="/" className="navbar-brand logo_h"><img src="img/logo.png" alt=""/></Link>
                         <button className="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">

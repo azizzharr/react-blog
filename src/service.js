@@ -56,6 +56,13 @@ class BlogService {
     getResource = (url) => {
         return this.request('GET', url)
     }
+    setResource = (url, body) => {
+        return this.request('POST', url, body)
+    }
+
+    updateResource = (url, body) => {
+        return this.request('PUT', url, body)
+    }
 
     deleteResource = (url) => {
         return this.request('DELETE', url)
@@ -70,10 +77,6 @@ class BlogService {
             throw new Error('ID undefined, please give me id number, ')
         }
         return this.deleteResource(`/news/${id}/`)
-    }
-
-    setResource = (url, body) => {
-        return this.request('POST', url, body)
     }
 
     getUser = () => {
@@ -92,6 +95,10 @@ class BlogService {
         return {...json, results: json.results.map(this._transformBlog)}
     }
 
+    updateBlog = async (id, data) => {
+        return this.requestForm('PUT',`/news/${id}`, data)
+    }
+
     getBlog = async (id) => {
         const json = await this.getResource(`/news/${id}/`)
         return this._transformBlog(json)
@@ -106,9 +113,9 @@ class BlogService {
             id: item.id,
             title: item.title,
             author: item.author,
-            shortBody:item.short_body,
+            shortBody: item.short_body,
             type: item.type,
-            imageBlog: item['image_blog']?`${this._baseUrl}${item['image_blog']}`:null,
+            imageBlog: item['image_blog'] ? `${this._baseUrl}${item['image_blog']}` : null,
             body: item.body,
             createAt: item['created_at'],
             updateAt: item['updated_at'],
