@@ -1,14 +1,15 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import withLogin from "../../provider/login/with-login";
 import './navbar-menu.css'
+import MyLink from "../../hooks/my-link";
 
 const NavbarMenu = ({isAuthenticated}) => {
     return (
         <ul className="nav navbar-nav menu_nav justify-content-center">
-            <li className="nav-item"><NavLink exact className="nav-link" to='/'>Home</NavLink></li>
+            <li className="nav-item"><MyLink exact className="nav-link" to='/'>Home</MyLink></li>
             {isAuthenticated &&
-            <li className="nav-item"><NavLink exact className="nav-link" to='/set-blog'>Set blog</NavLink></li>}
+            <li className="nav-item"><MyLink exact className="nav-link" to='/set-blog'>Set blog</MyLink></li>}
             <li className="nav-item"><a className="nav-link" href="category.html">Category</a></li>
             <li className="nav-item submenu dropdown">
                 <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"
@@ -26,4 +27,4 @@ const NavbarMenu = ({isAuthenticated}) => {
     )
 }
 
-export default withLogin(NavbarMenu);
+export default withLogin(withRouter(NavbarMenu));

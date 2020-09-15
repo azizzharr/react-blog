@@ -21,22 +21,19 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.props.getUser().then((data) => {
-            this.auth(data)
+        this.getUser().then(() => {
             this.setState({loading: false})
+        });
+    }
+
+    getUser = async () => {
+        await this.props.getUser().then((data) => {
+            this.setState({user: data, isAuthenticated: true})
         }).catch(({res}) => {
             if (res && res.status === 401) {
                 this.unAuth()
             }
-            this.setState({loading: false})
         })
-    }
-
-    auth = (data) => {
-        this.setState((state) => ({
-            user: data,
-            isAuthenticated: true
-        }))
     }
 
     unAuth = () => {
@@ -46,12 +43,12 @@ class App extends Component {
     render() {
         const {user, isAuthenticated, loading} = this.state;
         const unAuth = this.unAuth;
-        const auth = this.auth;
+        const getUser = this.getUser;
         if (loading) {
             return <Loader/>
         }
         return (
-            <LoginProvider value={{user, auth, isAuthenticated, unAuth}}>
+            <LoginProvider value={{user, getUser, isAuthenticated, unAuth}}>
                 <Router>
                     <Header/>
                     <Switch>

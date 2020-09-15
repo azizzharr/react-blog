@@ -3,7 +3,7 @@ import NavbarMenu from "./navbar-menu";
 import {Link} from "react-router-dom";
 import withLogin from "../provider/login/with-login";
 
-const Header = ({isAuthenticated,user}) => {
+const Header = ({isAuthenticated, user}) => {
 
     return (
         <header className="header_area">

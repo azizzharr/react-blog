@@ -108,7 +108,7 @@ class BlogService {
             author: item.author,
             shortBody:item.short_body,
             type: item.type,
-            imageBlog: `${this._baseUrl}${item['image_blog']}`,
+            imageBlog: item['image_blog']?`${this._baseUrl}${item['image_blog']}`:null,
             body: item.body,
             createAt: item['created_at'],
             updateAt: item['updated_at'],

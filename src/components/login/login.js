@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import {withRouter} from "react-router-dom";
 import Swal from "sweetalert2";
 import withLogin from "../provider/login/with-login";
+import notice from "../hooks/alerts";
 
 class Login extends Component {
 
@@ -24,15 +25,10 @@ class Login extends Component {
         e.preventDefault()
         await this.props.login(this.state).then((data) => {
             Cookies.set('token', data.token)
-            this.props.auth(data)
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Вы авторизованы',
-                showConfirmButton: false,
-                timer: 1500
+            this.props.getUser(data).then(() => {
+                notice('Вы авторизованы', 'success')
+                this.props.history.push('/')
             })
-            this.props.history.push('/')
         }).catch(async (err) => {
             const {res} = err;
             if (res && res.status === 400) {
