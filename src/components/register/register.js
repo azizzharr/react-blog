@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import withBlogService from "../provider/service/with-blog-service";
 import Swal from "sweetalert2";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
+import notice from "../hooks/alerts";
 
 class Register extends Component {
 
@@ -9,6 +10,7 @@ class Register extends Component {
         username: '',
         password: '',
         password2: '',
+        email: '',
         errors: {}
     }
 
@@ -32,13 +34,7 @@ class Register extends Component {
             return;
         }
         this.props.register(this.state).then((data) => {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Вы зарегистрированы',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            notice('Вы зарегистрированы', 'success')
             this.props.history.push('/login')
         }).catch(async (err) => {
             const {res} = err;
@@ -56,7 +52,7 @@ class Register extends Component {
             <div className='container jumbotron'>
                 <div className="card col-6 offset-3">
                     <article className="card-body">
-                        <a href="" className="float-right btn btn-outline-primary">Sign in</a>
+                        <Link to='/login' className="float-right btn btn-outline-primary">Sign in</Link>
                         <h4 className="card-title mb-4 mt-1">Sign up</h4>
                         {this.state.errors.detail && <div className="text-danger">
                             {this.state.errors.detail}
@@ -69,6 +65,16 @@ class Register extends Component {
                                        placeholder="Username" type="text"/>
                                 {this.state.errors.username && <div className="text-danger">
                                     {this.state.errors.username[0]}
+                                </div>}
+
+                            </div>
+                            <div className="form-group">
+                                <label>Your Email</label>
+                                <input required onChange={this.onChangeInputs} name="email" value={this.state.email}
+                                       className="form-control"
+                                       placeholder="Email" type="email"/>
+                                {this.state.errors.email && <div className="text-danger">
+                                    {this.state.errors.email[0]}
                                 </div>}
 
                             </div>
@@ -93,7 +99,7 @@ class Register extends Component {
                                 </div>}
                             </div>
                             <div className="form-group">
-                                <button type="submit" className="btn btn-primary btn-block"> Login</button>
+                                <button type="submit" className="btn btn-primary btn-block"> Sing up</button>
                             </div>
                         </form>
                     </article>

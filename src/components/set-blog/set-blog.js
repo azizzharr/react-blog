@@ -25,12 +25,20 @@ class SetBlog extends Component {
     }
 
     componentDidMount() {
+        this.getOptions()
+    }
+
+    getOptions = () => {
         const {data, getOptions} = this.props
         if (data) {
             this.setState({data})
         }
-        getOptions('/news/').then((data) => {
-            this.setState({options: data.actions['POST'], loading: false})
+        getOptions('/news/').then(({actions}) => {
+            if (actions) {
+                this.setState({options: actions['POST'], loading: false})
+            } else {
+                this.props.unAuth()
+            }
         })
     }
 

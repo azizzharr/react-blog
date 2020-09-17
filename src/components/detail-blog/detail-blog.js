@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import SidebarWidgets from "../blog-post-area/sidebar-widgets";
-import DetailHeroBanner from "./detail-hero-banner";
 import {withRouter} from "react-router-dom";
 import withBlogService from "../provider/service/with-blog-service";
 import Loader from "../loader";
-import Moment from "react-moment";
-import parse from "html-react-parser";
 import DetailBlogRender from "./detail-blog-render";
+import './detai-blog.css'
 
 class DetailBlog extends Component {
     state = {

@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import SidebarWidgets from "../blog-post-area/sidebar-widgets";
 import {Link} from "react-router-dom";
 import withLogin from "../provider/login/with-login";
+import Comment from "../comment";
 
 const DetailBlogRender = ({blog, user}) => {
 
@@ -37,6 +38,7 @@ const DetailBlogRender = ({blog, user}) => {
                                 </div>
                                 {parse(blog.body || "")}
                             </div>
+                            <Comment/>
                         </div>
                         <SidebarWidgets/>
                     </div>

@@ -79,8 +79,9 @@ class BlogService {
         return this.deleteResource(`/news/${id}/`)
     }
 
-    getUser = () => {
-        return this.getResource('/auth/users/me/')
+    getUser = async () => {
+        const data = await this.getResource('/auth/users/me/')
+        return this._transformUser(data)
     }
 
     login = (body) => {
@@ -96,7 +97,7 @@ class BlogService {
     }
 
     updateBlog = async (id, data) => {
-        return this.requestForm('PUT',`/news/${id}`, data)
+        return this.requestForm('PUT', `/news/${id}`, data)
     }
 
     getBlog = async (id) => {
@@ -106,6 +107,16 @@ class BlogService {
 
     setBlog = (body) => {
         return this.requestForm('POST', '/news/', body)
+    }
+
+    _transformUser = (user) => {
+        return {
+            username: user.username,
+            email: user.email,
+            avatar: user['get_avatar'] ? `${this._baseUrl}${user['get_avatar']}` : null,
+            name: user['first_name'],
+            surname: user['last_name'],
+        }
     }
 
     _transformBlog = (item) => {
