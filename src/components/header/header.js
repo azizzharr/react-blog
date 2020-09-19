@@ -23,17 +23,15 @@ const Header = ({isAuthenticated, user}) => {
                             <div className='row' style={{
                                 minWidth: '200px'
                             }}>
-                                {/*{!isAuthenticated && [*/}
-                                {/*    <div key='login' className='col-6'>*/}
-                                {/*        <Link to='/login'>Sing In</Link>*/}
-                                {/*    </div>,*/}
-                                {/*    <div key='register' className='col-6'>*/}
-                                {/*        <Link to='/register'>Sing Up</Link>*/}
-                                {/*    </div>*/}
-                                {/*]}*/}
-                                {/*{isAuthenticated && <p>{user.username}</p>}*/}
-
-                                <div>
+                                {!isAuthenticated && [
+                                    <div key='login' className='col-6'>
+                                        <Link to='/login'>Sing In</Link>
+                                    </div>,
+                                    <div key='register' className='col-6'>
+                                        <Link to='/register'>Sing Up</Link>
+                                    </div>
+                                ]}
+                                {isAuthenticated && <div>
                                     <img className='avatar rounded' alt='avatar' src={user.avatar}/>
                                     <div className="btn-group">
                                         <button type="button" className="btn btn-secondary dropdown-toggle"
@@ -44,8 +42,7 @@ const Header = ({isAuthenticated, user}) => {
                                             <a className="dropdown-item" href="#">Logout</a>
                                         </div>
                                     </div>
-                                </div>
-
+                                </div>}
                             </div>
                         </div>
                     </div>

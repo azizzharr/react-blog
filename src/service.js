@@ -87,6 +87,9 @@ class BlogService {
     login = (body) => {
         return this.setResource('/auth/token/login/', body)
     }
+    logout = () => {
+        return this.setResource('/auth/token/logout/')
+    }
     register = (body) => {
         return this.setResource('/auth/users/', body)
     }
