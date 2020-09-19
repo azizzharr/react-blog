@@ -29,6 +29,8 @@ class BlogPostArea extends Component {
                 blogs,
                 loading: false
             })
+        }).catch((err) => {
+            console.log(err.toString())
         })
     }
 

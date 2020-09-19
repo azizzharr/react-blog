@@ -48,7 +48,7 @@ class BlogService {
             throw err
         }
         const contentType = res.headers.get("content-type");
-        if (contentType === 'application/json') {
+        if (res.status !== 204 && contentType === 'application/json') {
             return await res.json()
         }
     }
@@ -56,7 +56,7 @@ class BlogService {
     getResource = (url) => {
         return this.request('GET', url)
     }
-    setResource = (url, body) => {
+    setResource = (url, body = {}) => {
         return this.request('POST', url, body)
     }
 
@@ -110,6 +110,9 @@ class BlogService {
 
     setBlog = (body) => {
         return this.requestForm('POST', '/news/', body)
+    }
+    setAvatar = (body) => {
+        return this.requestForm('PATCH', '/auth/users/me/', body)
     }
 
     _transformUser = (user) => {

@@ -3,6 +3,7 @@ import NavbarMenu from "./navbar-menu";
 import {Link} from "react-router-dom";
 import withLogin from "../provider/login/with-login";
 import './header.css'
+import SetAvatar from "../set-avatar/set-avatar";
 
 const Header = ({isAuthenticated, user}) => {
     return (
@@ -39,7 +40,8 @@ const Header = ({isAuthenticated, user}) => {
                                             {user.username}
                                         </button>
                                         <div className="dropdown-menu">
-                                            <a className="dropdown-item" href="#">Logout</a>
+                                            <Link className="dropdown-item" to="/logout">Logout</Link>
+                                            <SetAvatar/>
                                         </div>
                                     </div>
                                 </div>}

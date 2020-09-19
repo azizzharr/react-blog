@@ -9,9 +9,9 @@ import SetBlog from "../set-blog/set-blog";
 import {LoginProvider} from "../provider/login/login-context";
 import withBlogService from "../provider/service/with-blog-service";
 import Loader from "../loader";
-import DetailHeroBanner from "../detail-blog/detail-hero-banner";
 import DetailBlog from "../detail-blog/detail-blog";
 import UpdateBlog from "../update-blog/update-blog";
+import Logout from "../logout/logout";
 
 class App extends Component {
 
@@ -58,6 +58,7 @@ class App extends Component {
                             <BlogPostArea/>
                         </Route>
                         <Route exact path='/login' component={Login}/>
+                        <Route exact path='/logout' component={Logout}/>
                         <Route exact path='/register' component={Register}/>
                         <Route exact path='/set-blog' component={SetBlog}/>
                         <Route exact path='/update-blog/:id' component={UpdateBlog}/>
