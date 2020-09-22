@@ -111,8 +111,13 @@ class BlogService {
     setBlog = (body) => {
         return this.requestForm('POST', '/news/', body)
     }
-    setAvatar = (body) => {
-        return this.requestForm('PATCH', '/auth/users/me/', body)
+    setComment = async (body) => {
+        const comment = await this.requestForm('POST', '/comment/', body)
+        return this._transformComment(comment)
+    }
+    setAvatar = async (body) => {
+        const user = await this.requestForm('PATCH', '/auth/users/me/', body)
+        return this._transformUser(user)
     }
 
     _transformUser = (user) => {
@@ -132,10 +137,26 @@ class BlogService {
             author: item.author,
             shortBody: item.short_body,
             type: item.type,
-            imageBlog: item['image_blog'] ? `${this._baseUrl}${item['image_blog']}` : null,
+            imageBlog: this._getImageWithBaseUrl(item['image_blog']),
             body: item.body,
             createAt: item['created_at'],
             updateAt: item['updated_at'],
+            comments: (item['get_comments'] || []).map(this._transformComment),
+        }
+    }
+
+    _getImageWithBaseUrl = (url) => {
+        return url ? `${this._baseUrl}${url}` : null
+    }
+
+    _transformComment = (item) => {
+        return {
+            id:item.id,
+            avatar: this._getImageWithBaseUrl(item['owner']['get_avatar']),
+            username: item['owner'].username,
+            createAt: item['created_at'],
+            updateAt: item['updated_at'],
+            body: item.body
         }
     }
 }

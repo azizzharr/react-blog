@@ -12,6 +12,7 @@ import Loader from "../loader";
 import DetailBlog from "../detail-blog/detail-blog";
 import UpdateBlog from "../update-blog/update-blog";
 import Logout from "../logout/logout";
+import SetAvatar from "../set-avatar/set-avatar";
 
 class App extends Component {
 
@@ -29,12 +30,16 @@ class App extends Component {
 
     getUser = async () => {
         await this.props.getUser().then((data) => {
-            this.setState({user: data, isAuthenticated: true})
+            this.setUserApp(data)
         }).catch(({res}) => {
             if (res && res.status === 401) {
                 this.unAuth()
             }
         })
+    }
+
+    setUserApp = (data, callback) => {
+        this.setState({user: data, isAuthenticated: true}, callback)
     }
 
     unAuth = () => {
@@ -45,11 +50,12 @@ class App extends Component {
         const {user, isAuthenticated, loading} = this.state;
         const unAuth = this.unAuth;
         const getUser = this.getUser;
+        const setUserApp = this.setUserApp;
         if (loading) {
             return <Loader/>
         }
         return (
-            <LoginProvider value={{user, getUser, isAuthenticated, unAuth}}>
+            <LoginProvider value={{user, getUser, setUserApp, isAuthenticated, unAuth}}>
                 <Router>
                     <Header/>
                     <Switch>
@@ -60,6 +66,7 @@ class App extends Component {
                         <Route exact path='/login' component={Login}/>
                         <Route exact path='/logout' component={Logout}/>
                         <Route exact path='/register' component={Register}/>
+                        <Route exact path='/set-avatar' component={SetAvatar}/>
                         <Route exact path='/set-blog' component={SetBlog}/>
                         <Route exact path='/update-blog/:id' component={UpdateBlog}/>
                         <Route exact path='/blog/:id'>

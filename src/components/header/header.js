@@ -41,7 +41,7 @@ const Header = ({isAuthenticated, user}) => {
                                         </button>
                                         <div className="dropdown-menu">
                                             <Link className="dropdown-item" to="/logout">Logout</Link>
-                                            <SetAvatar/>
+                                            <Link className="dropdown-item" to="/set-avatar">Set avatar</Link>
                                         </div>
                                     </div>
                                 </div>}

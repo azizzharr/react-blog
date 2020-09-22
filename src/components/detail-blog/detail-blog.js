@@ -29,6 +29,12 @@ class DetailBlog extends Component {
         })
     }
 
+    appendComment = (comment) => {
+        this.setState(({blog}) => {
+            return {blog: {...blog, comments: [...blog.comments, comment]}}
+        })
+    }
+
     render() {
         const {blog, loading, error} = this.state
         if (loading) {
@@ -38,7 +44,7 @@ class DetailBlog extends Component {
             return <p>Не найдено</p>
         }
         return (
-            <DetailBlogRender blog={blog}/>
+            <DetailBlogRender appendComment={this.appendComment} blog={blog}/>
         );
     }
 }
